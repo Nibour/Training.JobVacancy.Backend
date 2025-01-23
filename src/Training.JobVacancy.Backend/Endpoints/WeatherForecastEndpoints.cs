@@ -1,10 +1,9 @@
 ﻿
-namespace Adaptit.Training.JobVacancy.Backend.Endpoints;
-
 using Adaptit.Training.JobVacancy.Backend.Dto;
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
+namespace Adaptit.Training.JobVacancy.Backend.Endpoints;
 public static class WeatherForecastEndpoints
 {
   static string[] summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };

@@ -26,5 +26,7 @@ app.MapOpenApi();
 app.MapScalarApiReference();
 
 app.MapWeatherEndpoints();
+app.MapFeedEndpoints();
+app.MapFeedEntryEndpoints();
 
 app.Run();
