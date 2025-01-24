@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace Adaptit.Training.JobVacancy.Backend.Endpoints;
 public static class WeatherForecastEndpoints
 {
-  static string[] summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+  private static readonly string[] Summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+  ];
 
   public static IEndpointRouteBuilder MapWeatherEndpoints(this IEndpointRouteBuilder endpoints)
   {
@@ -28,7 +29,7 @@ public static class WeatherForecastEndpoints
                 0,
                 DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 Random.Shared.Next(-20, 55),
-                summaries[Random.Shared.Next(summaries.Length)]
+                Summaries[Random.Shared.Next(Summaries.Length)]
             ))
         .ToList();
 
@@ -41,7 +42,7 @@ public static class WeatherForecastEndpoints
         id,
         DateOnly.FromDateTime(DateTime.Now.AddDays(id)),
         Random.Shared.Next(-20, 55),
-        summaries[Random.Shared.Next(summaries.Length)]
+        Summaries[Random.Shared.Next(Summaries.Length)]
     );
 
     return TypedResults.Ok(forecast);
