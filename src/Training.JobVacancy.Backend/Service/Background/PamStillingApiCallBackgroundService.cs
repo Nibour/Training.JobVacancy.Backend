@@ -3,7 +3,9 @@
 using Adaptit.Training.JobVacancy.Backend.Dto;
 using Adaptit.Training.JobVacancy.PamStillingApi;
 
-public class NavJobApiCallBackgroundService(IPamStillingApi pamStillingApi) : BackgroundService
+using Refit;
+
+public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi) : BackgroundService
 {
   private Feed? _firstFeed;
   private Feed? _lastFeed;
@@ -15,27 +17,27 @@ public class NavJobApiCallBackgroundService(IPamStillingApi pamStillingApi) : Ba
       var response = await pamStillingApi.GetFeed();
       if (response is { IsSuccessStatusCode: true })
       {
-        _firstFeed = response.Content; // Extract content and convert to List<Feed>
+        _firstFeed = response.Content;
       }
       else
       {
-        HandleError();
+        HandleError(response.Error);
       }
       response = await pamStillingApi.GetFeed("last");
       if (response is { IsSuccessStatusCode: true})
       {
-        _lastFeed = response.Content; // Extract content and convert to List<Feed>
+        _lastFeed = response.Content;
       }
       else
       {
-        HandleError();
+        HandleError(response.Error);
       }
       await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
     }
   }
 
-  private static void HandleError() =>
-    // TODO: ADD LOG OF FAILURE
+  private static void HandleError(ApiException responseError) =>
+    // TODO: ADD LOG OF FAILURE, A BACKGROUND SERVICE SHOULD NEVER THROW EXCEPTION FOR IT MUST CONTINUE TO RUN
     throw new NotImplementedException();
 
   public Feed? GetFeed(bool last) => last ? _lastFeed : _firstFeed;

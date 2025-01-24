@@ -2,38 +2,26 @@
 using Adaptit.Training.JobVacancy.Backend.Dto;
 using Adaptit.Training.JobVacancy.Backend.Service.Background;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 public static class FeedEndpoints
 {
 
-  public static void MapFeedEndpoints(this IEndpointRouteBuilder endpoints, NavJobApiCallBackgroundService navJobApiCallBackgroundService)
+  public static void MapFeedEndpoints(this IEndpointRouteBuilder endpoints)
   {
     var api = endpoints.MapGroup("/api/v2/feed")
         .WithOpenApi();
 
-    _ = api.MapGet("", (HttpRequest request, string last) =>
-    {
-      var ifNoneMatch = request.Headers.IfNoneMatch.FirstOrDefault();
-      var ifModifiedSince = request.Headers.IfModifiedSince.FirstOrDefault();
-
-      return GetFirstOrLastPage(last, ifNoneMatch, ifModifiedSince, navJobApiCallBackgroundService);
-    });
-
-    _ = api.MapGet("/{feedPageId}", (HttpRequest request, string feedPageId) =>
-    {
-      var ifNoneMatch = request.Headers.IfNoneMatch.FirstOrDefault();
-      var ifModifiedSince = request.Headers.IfModifiedSince.FirstOrDefault();
-
-      return GetPageById(feedPageId, ifNoneMatch, ifModifiedSince);
-    });
+    api.MapGet("", GetFirstOrLastPage);
+    api.MapGet("/{feedPageId}", GetPageById);
   }
 
   private static async Task<Results<Ok<Feed>, NotFound, StatusCodeHttpResult>> GetFirstOrLastPage(
-      string last, string? ifNoneMatch, string? ifModifiedSince, NavJobApiCallBackgroundService navJobApiCallBackgroundService)
+      string last,[FromHeader(Name = "if-None-Match")] string? ifNoneMatch, [FromHeader(Name = "if-Modified-Since")] string? ifModifiedSince, [FromServices] PamStillingApiCallBackgroundService pamStillingApiCallBackgroundService)
   {
     var feed = last.Equals("last")
-      ? navJobApiCallBackgroundService.GetFeed(true)
-      : navJobApiCallBackgroundService.GetFeed(false);
+      ? pamStillingApiCallBackgroundService.GetFeed(true)
+      : pamStillingApiCallBackgroundService.GetFeed(false);
 
     return feed != null
       ? TypedResults.Ok(feed)

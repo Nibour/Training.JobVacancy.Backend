@@ -15,7 +15,7 @@ builder.Services.AddTransient<OpenIdConnectOptions>();
 builder.Services.AddScoped<OpenIdConnectOptions>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddHostedService<NavJobApiCallBackgroundService>(sp => sp.GetRequiredService<NavJobApiCallBackgroundService>());
+builder.Services.AddHostedService<PamStillingApiCallBackgroundService>(sp => sp.GetRequiredService<PamStillingApiCallBackgroundService>());
 
 
 builder.Services.AddRefitClient<IPamStillingApi>()
@@ -35,7 +35,7 @@ app.UseHttpsRedirection();
 app.MapOpenApi();
 app.MapScalarApiReference();
 app.MapWeatherEndpoints();
-app.MapFeedEndpoints(app.Services.GetRequiredService<NavJobApiCallBackgroundService>());
+app.MapFeedEndpoints();
 app.MapFeedEntryEndpoints();
 
 app.Run();
