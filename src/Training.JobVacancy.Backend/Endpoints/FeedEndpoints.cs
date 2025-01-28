@@ -16,7 +16,7 @@ public static class FeedEndpoints
     api.MapGet("/{feedPageId}", GetPageById);
   }
 
-  private static async Task<Results<Ok<Feed>, NotFound, StatusCodeHttpResult>> GetFirstOrLastPage(
+  private static async Task<Results<Ok<FeedDto>, NotFound, StatusCodeHttpResult>> GetFirstOrLastPage(
       string last,[FromHeader(Name = "if-None-Match")] string? ifNoneMatch, [FromHeader(Name = "if-Modified-Since")] string? ifModifiedSince, [FromServices] PamStillingApiCallBackgroundService pamStillingApiCallBackgroundService)
   {
     var feed = last.Equals("last")
@@ -28,11 +28,11 @@ public static class FeedEndpoints
       : TypedResults.NotFound();
   }
 
-  private static async Task<Results<Ok<Feed>, NotFound, StatusCodeHttpResult>> GetPageById(
+  private static async Task<Results<Ok<FeedDto>, NotFound, StatusCodeHttpResult>> GetPageById(
       string feedPageId, string? ifNoneMatch, string? ifModifiedSince)
   {
 
-    Feed feed = new(
+   FeedDto feed = new(
         Version: "1.0",
         Title: "Example Feed",
         HomePageUrl: "https://example.com",

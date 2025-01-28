@@ -5,10 +5,10 @@ using Adaptit.Training.JobVacancy.PamStillingApi;
 
 using Refit;
 
-public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi) : BackgroundService
+public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi, ILogger<PamStillingApiCallBackgroundService> logger) : BackgroundService
 {
-  private Feed? _firstFeed;
-  private Feed? _lastFeed;
+  private FeedDto? _firstFeed;
+  private FeedDto? _lastFeed;
   /// <inheritdoc />
   protected override async Task ExecuteAsync(CancellationToken stoppingToken)
   {
@@ -36,9 +36,8 @@ public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi)
     }
   }
 
-  private static void HandleError(ApiException responseError) =>
-    // TODO: ADD LOG OF FAILURE, A BACKGROUND SERVICE SHOULD NEVER THROW EXCEPTION FOR IT MUST CONTINUE TO RUN
-    throw new NotImplementedException();
+  private void HandleError(ApiException responseError) =>
+    logger.LogError("Error occurred while fetching feed: {Message}", responseError.Message);
 
-  public Feed? GetFeed(bool last) => last ? _lastFeed : _firstFeed;
+  public FeedDto? GetFeed(bool last) => last ? _lastFeed : _firstFeed;
 }

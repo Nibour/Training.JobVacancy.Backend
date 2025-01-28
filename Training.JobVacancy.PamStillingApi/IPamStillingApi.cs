@@ -8,8 +8,8 @@ namespace Adaptit.Training.JobVacancy.PamStillingApi;
 public interface IPamStillingApi
 {
   [Get("/api/v1/feed")]
-  Task<ApiResponse<Feed>> GetFeed(string? last = null);
+  Task<ApiResponse<FeedDto>> GetFeed(string? last = null);
 
   [Get("/api/v1/{feedPageId}")]
-  Task<ApiResponse<Feed>> GetFeedById(string feedPageId);
+  Task<ApiResponse<FeedDto>> GetFeedById(string feedPageId);
 }

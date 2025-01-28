@@ -13,6 +13,7 @@
     <File Path=".dockerignore" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="Data\Data.csproj" Type="Classic C#" />
     <Project Path="src\Training.JobVacancy.Backend\Training.JobVacancy.Backend.csproj" Type="Classic C#" />
     <Project Path="Training.JobVacancy.PamStillingApi\Training.JobVacancy.PamStillingApi.csproj" Type="Classic C#" />
   </Folder>

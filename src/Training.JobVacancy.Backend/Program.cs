@@ -1,8 +1,10 @@
+using Adaptit.Data;
 using Adaptit.Training.JobVacancy.Backend.Endpoints;
 using Adaptit.Training.JobVacancy.Backend.Service.Background;
 using Adaptit.Training.JobVacancy.PamStillingApi;
 
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.EntityFrameworkCore;
 
 using Refit;
 
@@ -15,8 +17,15 @@ builder.Services.AddTransient<OpenIdConnectOptions>();
 builder.Services.AddScoped<OpenIdConnectOptions>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddHostedService<PamStillingApiCallBackgroundService>(sp => sp.GetRequiredService<PamStillingApiCallBackgroundService>());
+builder.Services.AddHostedService<PamStillingApiCallBackgroundService>();
 
+builder.Services.AddDbContext<FeedDatabase>(options =>
+{
+  options.UseNpgsql(builder.Configuration.GetConnectionString("FeedDatabase"),
+    sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))
+    .EnableDetailedErrors()
+    .EnableSensitiveDataLogging();
+});
 
 builder.Services.AddRefitClient<IPamStillingApi>()
   .ConfigureHttpClient(c =>
