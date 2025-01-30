@@ -5,6 +5,7 @@ public record FeedLine(
   string Url,
   string Title,
   string ContentText,
-  DateTimeOffset? DateModified,
+  DateTime? DateModified,
+  Feed Feed,
   FeedEntry? _FeedEntry
 );

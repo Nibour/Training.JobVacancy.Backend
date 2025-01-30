@@ -1,10 +1,10 @@
 ﻿namespace Adaptit.Training.JobVacancy.Backend.Dto;
 
 public record FeedLineDto(
-  string Id,
-  string Url,
+  Guid Id,
+  Uri Url,
   string Title,
   string ContentText,
-  DateTimeOffset? DateModified,
+  DateTime? DateModified,
   FeedEntryDto? _FeedEntry
 );

@@ -1,13 +1,13 @@
 ﻿namespace Adaptit.Training.JobVacancy.Backend.Dto;
 
-public record Feed(
-  string Version,
-  string Title,
-  string HomePageUrl,
-  string FeedUrl,
-  string Description,
-  string? NextUrl,
-  string Id,
-  string NextId,
-  List<FeedLine>? Items
-);
+public class Feed
+{
+  public string Version { get; set; }
+  public string Title { get; set; }
+  public Uri HomePageUrl { get; set; }
+  public string Description { get; set; }
+  public Guid Id { get; set; }
+  public Feed NextFeed { get; set; }
+  public ICollection<FeedLine> Items { get; set; } = [];
+}
+

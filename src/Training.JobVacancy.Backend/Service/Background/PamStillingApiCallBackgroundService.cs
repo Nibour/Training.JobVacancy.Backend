@@ -1,10 +1,8 @@
-﻿namespace Adaptit.Training.JobVacancy.Backend.Service.Background;
-
+﻿
 using Adaptit.Training.JobVacancy.Backend.Dto;
 using Adaptit.Training.JobVacancy.PamStillingApi;
 
-using Refit;
-
+namespace Adaptit.Training.JobVacancy.Backend.Service.Background;
 public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi, ILogger<PamStillingApiCallBackgroundService> logger) : BackgroundService
 {
   private FeedDto? _firstFeed;
@@ -14,30 +12,32 @@ public class PamStillingApiCallBackgroundService(IPamStillingApi pamStillingApi,
   {
     while (!stoppingToken.IsCancellationRequested)
     {
-      var response = await pamStillingApi.GetFeed();
-      if (response is { IsSuccessStatusCode: true })
-      {
-        _firstFeed = response.Content;
-      }
-      else
-      {
-        HandleError(response.Error);
-      }
-      response = await pamStillingApi.GetFeed("last");
-      if (response is { IsSuccessStatusCode: true})
-      {
-        _lastFeed = response.Content;
-      }
-      else
-      {
-        HandleError(response.Error);
-      }
-      await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
+      await Task.WhenAll(GetFirstFeedAsync(), GetFirstFeedAsync("last"));
+      await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
     }
   }
 
-  private void HandleError(ApiException responseError) =>
-    logger.LogError("Error occurred while fetching feed: {Message}", responseError.Message);
+  private async Task GetFirstFeedAsync(string? last = null)
+  {
+    var response = await pamStillingApi.GetFeed(last);
+    if (response is not { IsSuccessStatusCode: true })
+    {
+      logger.LogError(response.Error,"Error occurred while fetching feed: {Message}", response.Error.Message);
+      return;
+    }
+    // todo: Implement DB logic
+    if (last == "last")
+    {
+      _lastFeed = response.Content;
+    }
+    else
+    {
+      _firstFeed = response.Content;
+    }
+  }
 
-  public FeedDto? GetFeed(bool last) => last ? _lastFeed : _firstFeed;
+    public FeedDto? GetFeed(bool last)
+    {
+        return last ? _lastFeed : _firstFeed;
+    }
 }

@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+<!--    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>-->
     <NoLogo>true</NoLogo>
     <RootNamespace>Adaptit.$(MSBuildProjectName)</RootNamespace>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

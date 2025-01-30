@@ -5,6 +5,7 @@ using Refit;
 
 namespace Adaptit.Training.JobVacancy.PamStillingApi;
 
+[Headers("Authorization: Bearer")]
 public interface IPamStillingApi
 {
   [Get("/api/v1/feed")]

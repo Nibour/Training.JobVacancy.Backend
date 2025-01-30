@@ -6,5 +6,5 @@ public record FeedEntry(
   string Title,
   string BusinessName,
   string Municipal,
-  DateTimeOffset? SistEndret
+  DateTime? SistEndret
 );
